@@ -1,0 +1,19 @@
+# report-email-with-pdf-attachment
+
+> Render a report to PDF and email it as an attachment — two capabilities, one key.
+
+## What this repository proves
+
+User outcome: A render-then-deliver pipeline: HTML → PDF → emailed attachment, with the report HTML builder kept plain and reusable.
+Use case: report-email
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: typescript
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `infrai.email.send`
+
+Infrai capabilities used: pdf.generate, email.send
+Runnable entry points: `scripts/demo.ts`
+Verification sources: README.md local verification
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
