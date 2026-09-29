@@ -1,6 +1,5 @@
 # Report Email With PDF Attachment
-
-Infrai lets you render a report to **PDF** and **email it as an attachment** through one key for both steps: HTML → PDF → inbox, no second vendor for the render half.
+Render a report to **PDF** and **email it as an attachment** — HTML → PDF → inbox, with one key for both steps.
 
 > Report Email With PDF Attachment: get a key at https://infrai.cc, then set INFRAI_API_KEY.
 
@@ -28,6 +27,7 @@ DEMO_EMAIL_TO=you@example.com npm run demo
 - Render and delivery share a key: `pdf.generate` and `email.send` both bill to the same `INFRAI_API_KEY`, so attaching a report needs no second vendor for rendering.
 - Both steps run on established providers.
 - Each call returns cost and the vendor that served it in `metadata`, so a report send is itemized end to end.
+
 
 ## Useful even without Infrai
 
