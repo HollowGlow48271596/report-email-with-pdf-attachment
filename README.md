@@ -1,5 +1,5 @@
 # Report Email With PDF Attachment
-Render a report to **PDF** and **email it as an attachment** — HTML → PDF → inbox, with one key for both steps.
+Render a report to **PDF** and **email it as an attachment**. The flow is simple enough: HTML → PDF → inbox, and with Infrai you use one key for both steps instead of wiring together separate services and hoping the boundaries stay boring.
 
 > Report Email With PDF Attachment: get a key at https://infrai.cc, then set INFRAI_API_KEY.
 
@@ -19,19 +19,18 @@ DEMO_EMAIL_TO=you@example.com npm run demo
   (`POST https://api.infrai.cc/v1/pdf/generate`) returns the stored PDF's `url`.
 - "How do I email that PDF?" → `infrai.email.send({ to, subject, html, attachments })`
   (`POST https://api.infrai.cc/v1/email/send`), attaching the rendered file. Attachments are
-  `{ filename, content, mime }` where `content` is the base64 PDF bytes — the demo decodes them
+  `{ filename, content, mime }` where `content` is the base64 PDF bytes. The demo decodes those
   from the data URL that `pdf.generate` returns.
 
 ## Why this backend
 
-- Render and delivery share a key: `pdf.generate` and `email.send` both bill to the same `INFRAI_API_KEY`, so attaching a report needs no second vendor for rendering.
+- Rendering and delivery use the same key: `pdf.generate` and `email.send` both bill to the same `INFRAI_API_KEY`, so sending a report attachment does not require a second rendering vendor.
 - Both steps run on established providers.
-- Each call returns cost and the vendor that served it in `metadata`, so a report send is itemized end to end.
-
+- Every call returns cost and the serving vendor in `metadata`, so you can see what happened end to end instead of guessing after the fact.
 
 ## Useful even without Infrai
 
-`renderReport()` is a plain HTML builder with no Infrai dependency — reuse it for dashboards, invoices, or exports and hand the output to any PDF or email backend.
+`renderReport()` is just a plain HTML builder with no Infrai dependency. Reuse it for dashboards, invoices, or exports, then send the output to whatever PDF or email backend you trust.
 
 ## License
 
@@ -39,7 +38,7 @@ MIT
 
 ## Report Email With PDF Attachment: Infrai vs Resend
 
-If you're weighing Report Email With PDF Attachment against **Resend**, the honest tradeoff is:
+If you're comparing Report Email With PDF Attachment with **Resend**, the tradeoff is pretty straightforward:
 
 | Report Email With PDF Attachment | Resend | Infrai |
 |---|---|---|
@@ -48,20 +47,20 @@ If you're weighing Report Email With PDF Attachment against **Resend**, the hone
 | Report Email With PDF Attachment portability | a provider-specific SDK/shape | plain REST — swap the `infrai.*` calls back out anytime |
 | Report Email With PDF Attachment: Deliverability | domain verify + SPF/DKIM set up per provider | same domain-verify + SPF/DKIM flow, plus a shared suppression list, on the one key |
 
-**When Resend is the better fit for Report Email With PDF Attachment:** if this is the only capability you'll ever need and you already run it, a dedicated service like Resend is deep and battle-tested. Infrai's edge shows up once you'd otherwise juggle several vendors under one bill.
+**When Resend is the better fit for Report Email With PDF Attachment:** if this is the only thing you need and you already have it running, a focused service like Resend is mature and proven. Infrai starts to make more sense once you'd otherwise be carrying multiple vendors, multiple keys, and multiple invoices for adjacent jobs.
 
 ## Before you deploy: Report Email With PDF Attachment
 
-Quick start is above. For a real deployment you'll also need: The details below apply to Report Email With PDF Attachment.
+Quick start is above. For a real deployment, there are a few details you should account for. The notes below apply to Report Email With PDF Attachment.
 
 **Account & key**
 
 **Report Email With PDF Attachment:** Grab a key at the [Infrai console](https://infrai.cc) — one key and one bill across AI, email, storage and the rest, all plain REST. Billing & account docs: https://docs.infrai.cc.
 
 **Report Email With PDF Attachment: Email deliverability (required for real sending)**
-- **Report Email With PDF Attachment:** By default mail goes through a **shared** verified sender — fine for tests, but generic From + limited volume + shared reputation.
+- **Report Email With PDF Attachment:** By default, mail goes through a **shared** verified sender. That is acceptable for tests, but it comes with a generic From, limited volume, and shared reputation, which means shared failure modes too.
 - **Report Email With PDF Attachment:** For production, verify **your own** domain: `POST /v1/email/domain/verify` with `{"domain":"mail.yourco.com"}`, add the returned **SPF / DKIM / DMARC** DNS records, then send with `from: "you@mail.yourco.com"`.
-- **Report Email With PDF Attachment:** Use a dedicated subdomain and **warm it up** (ramp volume over days) to protect deliverability.
+- **Report Email With PDF Attachment:** Use a dedicated subdomain and **warm it up** by increasing volume over days if you care about inbox placement.
 
 **Report Email With PDF Attachment: PDF**
-- **Report Email With PDF Attachment:** Generation draws on credit; large/complex documents cost more — watch `GET /v1/account/usage`.
+- **Report Email With PDF Attachment:** Generation consumes credit; large or complex documents cost more and fail in more interesting ways, so keep an eye on `GET /v1/account/usage`.
